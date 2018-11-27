@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">My Service Output</string>
+    <string name="button_start_service_label">Start service</string>
+    <string name="button_start_second_activity_label">Show service output</string>
+    <string name="back_button_label">Back</string>
+    <string name="button_stop_service_label">Stop service</string>
+</resources>
