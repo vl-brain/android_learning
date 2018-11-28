@@ -15,17 +15,16 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class ServiceOutputActivity extends Activity implements View.OnClickListener {
-
-    public static final String LOG_TAG = "Second activity";
-    public static final String STATE_PARAM_IS_SERVICE_BOUND = "SERVICE_BOUND";
-    public static final String STATE_PARAM_OUTPUT_MESSENGER = "OUTPUT_MESSENGER";
+    public static final String TAG = ServiceOutputActivity.class.getSimpleName();
+    public static final String ERR_MSG_FAILED_TO_SUBSCRIBE_TO_MY_SERVICE = "Failed to subscribe to MyService";
+    public static final String ERR_MSG_FAILED_TO_UNSUBSCRIBE_FROM_MY_SERVICE = "Failed to unsubscribe from MyService";
     private Button backButton;
     private TextView serviceOutputTextView;
-    private boolean mServiceBound;
-    private Messenger mOutputMessenger;
-    private final Messenger mIncomeMessenger = new Messenger(new IncomeHandler());
+    private Messenger outputMessenger;
+    private final Messenger incomeMessenger = new Messenger(new IncomeMsgHandler());
+    private ServiceConnection connectionHandler = new ServiceConnectionHandler();
 
-    private class IncomeHandler extends Handler {
+    private class IncomeMsgHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -41,55 +40,41 @@ public class ServiceOutputActivity extends Activity implements View.OnClickListe
         }
     }
 
-    private ServiceConnection mConnection = new ServiceConnection() {
+    private class ServiceConnectionHandler implements ServiceConnection {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            mOutputMessenger = new Messenger(service);
-            mServiceBound = true;
+            outputMessenger = new Messenger(service);
             subscribeToMyServiceOutput();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            mOutputMessenger = null;
-            mServiceBound = false;
+            outputMessenger = null;
         }
-    };
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(STATE_PARAM_IS_SERVICE_BOUND, mServiceBound);
-        outState.putParcelable(STATE_PARAM_OUTPUT_MESSENGER, mOutputMessenger);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_second);
+        setContentView(R.layout.activity_service_output);
         backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(this);
         serviceOutputTextView = findViewById(R.id.service_output);
         serviceOutputTextView.setMovementMethod(new ScrollingMovementMethod());
-        if (savedInstanceState != null) {
-            mServiceBound = savedInstanceState.getBoolean(STATE_PARAM_IS_SERVICE_BOUND);
-            mOutputMessenger = savedInstanceState.getParcelable(STATE_PARAM_OUTPUT_MESSENGER);
-        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        bindToMyService();
+        Intent intent = new Intent(this, MyService.class);
+        bindService(intent, connectionHandler, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (mServiceBound) {
-            unsubscribeFromMyServiceOutput();
-            unbindFromMyService();
-        }
+        unsubscribeFromMyServiceOutput();
+        unbindService(connectionHandler);
     }
 
     @Override
@@ -101,35 +86,31 @@ public class ServiceOutputActivity extends Activity implements View.OnClickListe
         }
     }
 
-    private void bindToMyService() {
-        Intent intent = new Intent(this, MyService.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-    }
-
     private void subscribeToMyServiceOutput() {
+        if (outputMessenger == null) {
+            Log.w(TAG, ERR_MSG_FAILED_TO_SUBSCRIBE_TO_MY_SERVICE);
+            return;
+        }
         try {
             Message msg = Message.obtain(null, MyService.MSG_SUBSCRIBE_ACTIVITY);
-            msg.replyTo = mIncomeMessenger;
-            mOutputMessenger.send(msg);
-        }
-        catch (RemoteException e) {
-            Log.e(LOG_TAG, "Failed to subscribe to MyService", e);
+            msg.replyTo = incomeMessenger;
+            outputMessenger.send(msg);
+        } catch (RemoteException e) {
+            Log.e(TAG, ERR_MSG_FAILED_TO_SUBSCRIBE_TO_MY_SERVICE, e);
         }
     }
 
     private void unsubscribeFromMyServiceOutput() {
+        if (outputMessenger == null) {
+            Log.w(TAG, ERR_MSG_FAILED_TO_UNSUBSCRIBE_FROM_MY_SERVICE);
+            return;
+        }
         try {
             Message msg = Message.obtain(null, MyService.MSG_UNSUBSCRIBE_ACTIVITY);
-            msg.replyTo = mIncomeMessenger;
-            mOutputMessenger.send(msg);
+            msg.replyTo = incomeMessenger;
+            outputMessenger.send(msg);
+        } catch (RemoteException e) {
+            Log.e(TAG, ERR_MSG_FAILED_TO_UNSUBSCRIBE_FROM_MY_SERVICE, e);
         }
-        catch (RemoteException e) {
-            Log.e(LOG_TAG, "Failed to unsubscribe from MyService", e);
-        }
-    }
-
-    private void unbindFromMyService() {
-        unbindService(mConnection);
-        mServiceBound = false;
     }
 }

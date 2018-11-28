@@ -8,17 +8,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements View.OnClickListener {
-    public static final String STATE_PARAM_SERVICE_NEED_STOP = "SERVICE_NEED_STOP";
     private Button startServiceButton;
     private Button stopServiceButton;
-    private Button startSecondActivityButton;
-    private boolean mServiceNeedStop = false;
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(STATE_PARAM_SERVICE_NEED_STOP, mServiceNeedStop);
-    }
+    private Button showServiceOutputButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +20,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         startServiceButton.setOnClickListener(this);
         stopServiceButton = findViewById(R.id.stop_service_button);
         stopServiceButton.setOnClickListener(this);
-        startSecondActivityButton = findViewById(R.id.start_second_activity_button);
-        startSecondActivityButton.setOnClickListener(this);
-        if (savedInstanceState != null) {
-            mServiceNeedStop = savedInstanceState.getBoolean(STATE_PARAM_SERVICE_NEED_STOP);
-        }
+        showServiceOutputButton = findViewById(R.id.show_service_output_button);
+        showServiceOutputButton.setOnClickListener(this);
     }
 
     @Override
@@ -50,8 +39,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.stop_service_button:
                 stopMyService();
                 break;
-
-            case R.id.start_second_activity_button:
+            case R.id.show_service_output_button:
                 final Intent intent = new Intent(this, ServiceOutputActivity.class);
                 startActivity(intent);
                 break;
@@ -59,24 +47,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void startMyService() {
-        if (mServiceNeedStop) {
-            Toast.makeText(this, "Service already running", Toast.LENGTH_SHORT).show();
-            return;
-        }
         final Intent intent = new Intent(this, MyService.class);
         startService(intent);
-        mServiceNeedStop = true;
         Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
     }
 
     private void stopMyService() {
-        if (!mServiceNeedStop) {
-            Toast.makeText(this, "Service not started yet", Toast.LENGTH_SHORT).show();
-            return;
-        }
         final Intent intent = new Intent(this, MyService.class);
-        stopService(intent);
-        mServiceNeedStop = false;
-        Toast.makeText(this, "Service stopped", Toast.LENGTH_SHORT).show();
+        final boolean serviceStopped = stopService(intent);
+        final String message = serviceStopped ? "Service stopped" : "Service not started yet";
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
