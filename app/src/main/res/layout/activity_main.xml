@@ -8,7 +8,7 @@
         tools:context=".activity.MainActivity">
 
     <Button
-            android:text="@string/button_set_new_state_label"
+            android:text="@string/button_get_next_state_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/next_state_button"

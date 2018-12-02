@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Change state app</string>
-    <string name="button_set_new_state_label">Get next state</string>
+    <string name="button_get_next_state_label">Get next state</string>
 </resources>
