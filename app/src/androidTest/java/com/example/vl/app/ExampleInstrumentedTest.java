@@ -1,4 +1,4 @@
-package com.example.vl.myservice;
+package com.example.vl.app;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

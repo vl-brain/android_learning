@@ -1,4 +1,4 @@
-package com.example.vl.myservice;
+package com.example.vl.app;
 
 import org.junit.Test;
 

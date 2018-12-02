@@ -1,7 +1,4 @@
 <resources>
-    <string name="app_name">My Service Output</string>
-    <string name="button_start_service_label">Start service</string>
-    <string name="button_show_service_output_label">Show service output</string>
-    <string name="back_button_label">Back</string>
-    <string name="button_stop_service_label">Stop service</string>
+    <string name="app_name">Change state app</string>
+    <string name="button_set_new_state_label">Get next state</string>
 </resources>

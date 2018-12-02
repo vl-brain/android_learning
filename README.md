@@ -1,10 +1,7 @@
-# Task 3
-Make activity with 2 buttons.
-First button run service.
-Second button run second activity.
-Second activity during start up bind to service.
-Service executed in separate thread and generate output.
-Output is received in second activity.
-Second activity show received service output.
-
-Optioanal: add button on first activity to stop service.
+# Task 4
+Make IntentService.
+It will handle income intents and change state in singleton StateManager.
+StateManager will have 5 states(A->B->C->D->E) and 2 methods: getCurrentState and setNextState.
+IntentService after change state should broadcast new state to all subscribers.
+Activity which subscribed on broadcast message should view new state in TextView.
+Activity should have button which send intent to IntentService for next state.
