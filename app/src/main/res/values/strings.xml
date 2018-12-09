@@ -1,7 +1,10 @@
 <resources>
-    <string name="app_name">My Service Output</string>
-    <string name="button_start_service_label">Start service</string>
-    <string name="button_show_service_output_label">Show service output</string>
+    <string name="app_name">Layouts</string>
+    <string name="linear_horizontal_layout_button_label">Linear layout(horizontal)</string>
+    <string name="relative_layout_button_label">Relative layout</string>
+    <string name="linear_vertical_layout_button_label">Linear layout(vertical)</string>
+    <string name="constraint_layout_button_label">Constraint layout</string>
+    <string name="clear_button_label">Clear</string>
     <string name="back_button_label">Back</string>
-    <string name="button_stop_service_label">Stop service</string>
+    <string name="empty"/>
 </resources>

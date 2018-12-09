@@ -9,21 +9,28 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ServiceOutputActivity">
-        </activity>
 
         <service
-                android:name=".MyService"
+                android:name=".service.MyService"
                 android:enabled="true"
                 android:exported="false">
         </service>
+
+        <activity android:name=".activity.LinearHorizontalLayoutActivity">
+        </activity>
+        <activity android:name=".activity.RelativeLayoutActivity">
+        </activity>
+        <activity android:name=".activity.LinearVerticalLayoutActivity">
+        </activity>
+        <activity android:name=".activity.ConstraintLayoutActivity">
+        </activity>
     </application>
 
 </manifest>

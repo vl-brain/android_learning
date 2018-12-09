@@ -1,4 +1,4 @@
-package com.example.vl.myservice;
+package com.example.vl.myservice.service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -15,6 +15,8 @@ public class MyService extends Service {
     public static final int MSG_SERVICE_OUTPUT = 1;
     public static final int MSG_SUBSCRIBE_ACTIVITY = 2;
     public static final int MSG_UNSUBSCRIBE_ACTIVITY = 3;
+    public static final String NEXT_OUTPUT_ACTION = "com.example.vl.myservice.service.NEXT_OUTPUT_ACTION";
+    public static final String OUTPUT_MSG_EXTRA = "OUTPUT_MSG";
     private final List<Messenger> activityMessengers = new CopyOnWriteArrayList<>();
     private final Messenger incomeMessenger = new Messenger(new IncomeMsgHandler());
     private final Thread asyncTask = new Thread(new InternalAsyncTask());
@@ -48,6 +50,10 @@ public class MyService extends Service {
                 final String outputMsg = "i = " + counter++;
                 Log.d(ASYNC_TASK_TAG, outputMsg);
 
+                final Intent broadcastIntent = new Intent(NEXT_OUTPUT_ACTION);
+                broadcastIntent.putExtra(OUTPUT_MSG_EXTRA, outputMsg);
+                sendBroadcast(broadcastIntent);
+
                 for (Messenger activityMessenger : activityMessengers) {
                     try {
                         activityMessenger.send(Message.obtain(null, MSG_SERVICE_OUTPUT, outputMsg));
@@ -71,7 +77,6 @@ public class MyService extends Service {
 
     @Override
     public void onCreate() {
-        Log.d(TAG, "onCreate");
         if (!asyncTask.isAlive()) {
             asyncTask.start();
         }
@@ -79,32 +84,17 @@ public class MyService extends Service {
     }
 
     @Override
-    public int onStartCommand(final Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand");
+    public int onStartCommand(Intent intent, int flags, int startId) {
         return START_STICKY;
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.d(TAG, "onBind");
         return incomeMessenger.getBinder();
     }
 
     @Override
-    public void onRebind(Intent intent) {
-        Log.d(TAG, "onRebind");
-        super.onRebind(intent);
-    }
-
-    @Override
-    public boolean onUnbind(Intent intent) {
-        Log.d(TAG, "onUnbind");
-        return super.onUnbind(intent);
-    }
-
-    @Override
     public void onDestroy() {
-        Log.d(TAG, "onDestroy");
         asyncTask.interrupt();
         super.onDestroy();
     }

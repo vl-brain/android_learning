@@ -5,33 +5,50 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".activity.MainActivity">
 
     <Button
-            android:text="@string/button_start_service_label"
+            android:text="@string/linear_horizontal_layout_button_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/start_service_button" android:layout_marginTop="120dp"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
+            android:id="@+id/show_linear_horizontal_layout_activity_button" android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" android:layout_marginStart="8dp" android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/show_relative_layout_activity_button"
+            app:layout_constraintVertical_chainStyle="spread"/>
     <Button
-            android:text="@string/button_stop_service_label"
+            android:text="@string/relative_layout_button_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/stop_service_button" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/start_service_button" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/show_service_output_button"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
+            android:id="@+id/show_relative_layout_activity_button" android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" android:layout_marginStart="8dp" android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintTop_toTopOf="@id/show_linear_horizontal_layout_activity_button"
+            app:layout_constraintBottom_toBottomOf="@id/show_linear_vertical_layout_activity_button"
+            app:layout_constraintVertical_chainStyle="spread"/>
     <Button
-            android:text="@string/button_show_service_output_label"
+            android:text="@string/linear_vertical_layout_button_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/show_service_output_button" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/start_service_button"
+            android:id="@+id/show_linear_vertical_layout_activity_button" android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" android:layout_marginStart="8dp" android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintTop_toTopOf="@id/show_relative_layout_activity_button"
+            app:layout_constraintBottom_toBottomOf="@id/show_constraint_layout_activity_button"
+            app:layout_constraintVertical_chainStyle="spread"/>
+    <Button
+            android:text="@string/constraint_layout_button_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/show_constraint_layout_activity_button" android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" android:layout_marginStart="8dp" android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintTop_toTopOf="@id/show_linear_vertical_layout_activity_button"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="8dp" app:layout_constraintVertical_bias="0.337"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
-
+            app:layout_constraintVertical_chainStyle="spread"/>
 </android.support.constraint.ConstraintLayout>
